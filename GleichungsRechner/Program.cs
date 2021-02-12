@@ -38,15 +38,23 @@ namespace GleichungsRechner
                     inputO.RemoveAt(0);
                     inputOArr = inputO.ToArray();
                 }
-            }  //vorzeichen erkenner
+            } //vorzeichen erkenner 
 
-            for (int x = 0; inputOArr.Length > x; x++) 
+            for (int x = 0; inputOArr.Length - 1 > x; x++)
             {
-                
+                double z = Convert.ToDouble(inputZ[x + 1]);
+                if (inputOArr[x] == "-")
+                {
+                    z = z - (z * 2);
+                    inputZ[x + 1] = z.ToString();
+                }
+                else if (inputOArr[x] == "+")
+                {
+                    z = z;
+                }
+            } //Vorzeichen erstellen
 
-                ergebnis = PunktVorStrich(inputOArr, inputZ);
-
-            } //Berechnen
+            ergebnis = PunktVorStrich(inputOArr, inputZ);
 
             return ergebnis;
         }
@@ -54,14 +62,16 @@ namespace GleichungsRechner
         {
             double ergebnis = 0;
 
-            ergebnis = Convert.ToDouble(inputZ[0]);
-    
-
            for(int x = 0; Operator.Length > x; x++)
             {
                 if (Operator[x].Contains('^'))
                 {
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x+1]);
+                    if(ergebnis == 0)
+                    {
+                        ergebnis = Convert.ToDouble(inputZ[x+1]);
+                    }
+                    
+                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
                 }
                 
             }
@@ -69,7 +79,12 @@ namespace GleichungsRechner
             {
                 if (Operator[x].Contains('*'))
                 {
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x + 1]);
+                    if (ergebnis == 0)
+                    {
+                        ergebnis = Convert.ToDouble(inputZ[x+1]);
+                    }
+
+                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
                 }
 
             }
@@ -77,6 +92,11 @@ namespace GleichungsRechner
             {
                 if (Operator[x].Contains('/'))
                 {
+                    if (ergebnis == 0)
+                    {
+                        ergebnis = Convert.ToDouble(inputZ[x+1]);
+                    }
+
                     ergebnis = Berechner(Operator[x], ergebnis, inputZ[x + 1]);
                 }
 
@@ -85,7 +105,12 @@ namespace GleichungsRechner
             {
                 if (Operator[x].Contains('+'))
                 {
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x + 1]);
+                    if (ergebnis == 0)
+                    {
+                        ergebnis = Convert.ToDouble(inputZ[x+1]);
+                    }
+
+                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
                 }
 
             }
@@ -93,16 +118,21 @@ namespace GleichungsRechner
             {
                 if (Operator[x].Contains('-'))
                 {
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x + 1]);
+                    if (ergebnis == 0)
+                    {
+                        ergebnis = Convert.ToDouble(inputZ[x+1]);
+                    }
+
+                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
                 }
 
             }
             return ergebnis ;
         } // punkt vor strich beachtung
 
-        public static double Berechner(string Operator, double ergebnis, string zahl)
+        public static double Berechner(string Operator, double zahl2, string ergebnis1)
         {
-            var zahl2 = Convert.ToDouble(zahl);
+            var ergebnis = Convert.ToDouble(ergebnis1);
 
             if (Operator == "^")
             {
@@ -123,12 +153,12 @@ namespace GleichungsRechner
             }
             else if (Operator == "-")
             {
-                ergebnis = ergebnis - zahl2;
+                ergebnis = ergebnis + zahl2;
             }
             return ergebnis;
         } //vorzeichen zuordnen
         public static char[] Zahlen = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-        public static char[] Operatoren = { '+', '-', '*', '/', '^'};
+        public static char[] Operatoren = {'-', '+', '*', '/', '^'};
 
     }
 }
