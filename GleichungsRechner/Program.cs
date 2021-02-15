@@ -8,8 +8,11 @@ namespace GleichungsRechner
     {
         static void Main(string[] args)
         {
-            string a = Console.ReadLine(); //input
-            Console.WriteLine(Berechne.Term(a));
+            for (int x = 0; x > -1; x++)
+            {
+                string a = Console.ReadLine(); //input
+                Console.WriteLine(Berechne.Term(a));
+            }
         }
     }
 }

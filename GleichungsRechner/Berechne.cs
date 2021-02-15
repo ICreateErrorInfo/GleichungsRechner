@@ -6,13 +6,13 @@ namespace GleichungsRechner
 {
     public class Berechne
     {
-        public static List<string> _z = new List<string>();
-        public static List<string> _o = new List<string>();
-        public static char[] Zahlen = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
-        public static char[] Operatoren = { '-', '+', '*', '/', '^', '(', ')' };
-        public static double _ergebnis = 0;
+        private static List<string> _z = new List<string>();
+        private static List<string> _o = new List<string>();
+        private static char[] Zahlen = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
+        private static char[] Operatoren = { '-', '+', '*', '/', '^', '(', ')' };
+        private static double _ergebnis = 0;
 
-        public static void Parser(string input)
+        private static void Parser(string input)
         {
             char[] inputCh;
             inputCh = input.ToCharArray();
@@ -44,7 +44,7 @@ namespace GleichungsRechner
                 }
             }
         }
-        public static void VorzeichenBerechner()
+        private static void VorzeichenBerechner()
         {
             if (_o.Count == _z.Count)
             {
@@ -61,7 +61,7 @@ namespace GleichungsRechner
                 }
             }
         }
-        public static void PlusZuMinusConverter()
+        private static void PlusZuMinusConverter()
         {
             for (int x = 0; _o.Count > x; x++)
             {
@@ -73,7 +73,7 @@ namespace GleichungsRechner
                 }
             }
         }
-        public static void PunktVorStrich()
+        private static void PunktVorStrich()
         {
             for(; _o.Count > 0;)
             {
@@ -94,7 +94,7 @@ namespace GleichungsRechner
                     int stelleMul = _o.IndexOf("*");
                     var stelle = stelleDiff;
                     
-                    if((stelleMul < stelleDiff) || stelleDiff == -1)
+                    if(stelleMul > -1 && (stelleMul < stelleDiff) || stelleDiff == -1)
                     {
                         op = "*";
                         stelle = stelleMul;
@@ -126,7 +126,7 @@ namespace GleichungsRechner
                     continue;
                 }
             }
-        }                   
+        }
         private static void Clear() 
         {
             _z.Clear();
@@ -145,7 +145,7 @@ namespace GleichungsRechner
             return _ergebnis;
         }
 
-        public static bool isOperator(char input)
+        private static bool isOperator(char input)
         {
             int i = 0;
             foreach(int element in Operatoren)
@@ -158,7 +158,7 @@ namespace GleichungsRechner
             }
             return false;
         } // check ob input is operator
-        public static bool isZahl(char input)
+        private static bool isZahl(char input)
         {
             int i = 0;
             foreach (int element in Zahlen)
@@ -170,8 +170,8 @@ namespace GleichungsRechner
                 i++;
             }
             return false;
-        } // che<ck ob input is zahl
-        public static double Berechner(string Operator, string zahl, string zahl2)
+        } // check ob input is zahl
+        private static double Berechner(string Operator, string zahl, string zahl2)
         {
             var ergebnis = Convert.ToDouble(zahl);
             var ergebnis2 = ergebnis;

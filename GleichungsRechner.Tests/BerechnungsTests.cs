@@ -15,6 +15,7 @@ namespace GleichungsRechner.Tests {
             yield return new TestCaseData {Input = "24^2+86^3", Expected = 636632};
             yield return new TestCaseData {Input = "10+5-5", Expected = 10};
             yield return new TestCaseData {Input = "10-5+5", Expected = 10};
+            yield return new TestCaseData { Input = "10-42+8^3*98/7", Expected = 7136 };
         }
 
         [Test, TestCaseSource(nameof(TestCases))]
