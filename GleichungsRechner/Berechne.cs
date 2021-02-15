@@ -10,6 +10,7 @@ namespace GleichungsRechner
         public static List<string> _o = new List<string>();
         public static char[] Zahlen = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' };
         public static char[] Operatoren = { '-', '+', '*', '/', '^', '(', ')' };
+        public static double _ergebnis = 0;
 
         public static void Parser(string input)
         {
@@ -72,15 +73,98 @@ namespace GleichungsRechner
                 }
             }
         }
+        public static void PunktVorStrich()
+        {
+            bool firstTime = true;
+            double TermErgebnis = 0;
+
+            for(; _o.Count > 0;)
+            {
+                if (_o.Contains("^"))
+                {
+                    int stelle = _o.IndexOf("^");
+                    if (firstTime)
+                    {
+                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        firstTime = false;
+                        _z.RemoveAt(stelle + 1);
+                    }
+                    TermErgebnis = Berechner("^", TermErgebnis.ToString(), _z[stelle]);
+                    _o.RemoveAt(stelle);
+                    _z.RemoveAt(stelle);
+                    continue;
+                }
+
+                if (_o.Contains("*"))
+                {
+                    int stelle = _o.IndexOf("*");
+                    if (firstTime)
+                    {
+                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        firstTime = false;
+                        _z.RemoveAt(stelle + 1);
+                    }
+                    TermErgebnis = Berechner("*", _z[stelle], TermErgebnis.ToString());
+                    _o.RemoveAt(stelle);
+                    _z.RemoveAt(stelle);
+                    continue;
+                }
+
+                if (_o.Contains("/"))
+                {
+                    int stelle = _o.IndexOf("/");
+                    if (firstTime)
+                    {
+                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        firstTime = false;
+                        _z.RemoveAt(stelle + 1);
+                    }
+                    TermErgebnis = Berechner("/", _z[stelle], TermErgebnis.ToString());
+                    _o.RemoveAt(stelle);
+                    _z.RemoveAt(stelle);
+                    continue;
+                }
+
+                if (_o.Contains("+"))
+                {
+                    int stelle = _o.IndexOf("+");
+                    if (firstTime)
+                    {
+                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        firstTime = false;
+                        _z.RemoveAt(stelle + 1);
+                    }
+                    TermErgebnis = Berechner("+", _z[stelle], TermErgebnis.ToString());
+                    _o.RemoveAt(stelle);
+                    _z.RemoveAt(stelle);
+                    continue;
+                }
+
+                if (_o.Contains("-"))
+                {
+                    int stelle = _o.IndexOf("-");
+                    if (firstTime)
+                    {
+                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        firstTime = false;
+                        _z.RemoveAt(stelle + 1);
+                    }
+                    TermErgebnis = Berechner("-", _z[stelle], TermErgebnis.ToString());
+                    _o.RemoveAt(stelle);
+                    _z.RemoveAt(stelle);
+                    continue;
+                }
+            }
+        }                   
 
         public static double Term(string input)
         {
             Parser(input);
             VorzeichenBerechner();
             PlusZuMinusConverter();
-
-            double ergebnis = PunktVorStrich(_o, _z);
-            return ergebnis;
+            PunktVorStrich();
+ 
+            return _ergebnis;
         }
 
         public static bool isOperator(char input)
@@ -108,104 +192,34 @@ namespace GleichungsRechner
                 i++;
             }
             return false;
-        } // check ob input is zahl
-        public static double PunktVorStrich(List<string> Operator, List<string> inputZ)
+        } // che<ck ob input is zahl
+        public static double Berechner(string Operator, string zahl, string zahl2)
         {
-            double ergebnis = 0;
-
-            for (int x = 0; Operator.Count > x; x++)
-            {
-                if (Operator[x].Contains('^'))
-                {
-                    if (ergebnis == 0)
-                    {
-                        ergebnis = Convert.ToDouble(inputZ[x + 1]);
-                    }
-
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
-                }
-
-            }
-            for (int x = 0; Operator.Count > x; x++)
-            {
-                if (Operator[x].Contains('*'))
-                {
-                    if (ergebnis == 0)
-                    {
-                        ergebnis = Convert.ToDouble(inputZ[x + 1]);
-                    }
-
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
-                }
-
-            }
-            for (int x = 0; Operator.Count > x; x++)
-            {
-                if (Operator[x].Contains('/'))
-                {
-                    if (ergebnis == 0)
-                    {
-                        ergebnis = Convert.ToDouble(inputZ[x + 1]);
-                    }
-
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x + 1]);
-                }
-
-            }
-            for (int x = 0; Operator.Count > x; x++)
-            {
-                if (Operator[x].Contains('+'))
-                {
-                    if (ergebnis == 0)
-                    {
-                        ergebnis = Convert.ToDouble(inputZ[x + 1]);
-                    }
-
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
-                }
-
-            }
-            for (int x = 0; Operator.Count > x; x++)
-            {
-                if (Operator[x].Contains('-'))
-                {
-                    if (ergebnis == 0)
-                    {
-                        ergebnis = Convert.ToDouble(inputZ[x + 1]);
-                    }
-
-                    ergebnis = Berechner(Operator[x], ergebnis, inputZ[x]);
-                }
-
-            }
-            return ergebnis;
-        } // punkt vor strich beachtung
-        public static double Berechner(string Operator, double zahl2, string ergebnis1)
-        {
-            var ergebnis = Convert.ToDouble(ergebnis1);
+            var ergebnis = Convert.ToDouble(zahl);
+            var zahlDou = Convert.ToDouble(zahl2);
 
             if (Operator == "^")
             {
-                for (int x = 1; zahl2 > x; x++)
+                for (int x = 1; zahlDou > x; x++)
                 {
                     ergebnis = ergebnis * ergebnis;
                 }
             }
             else if (Operator == "*")
             {
-                ergebnis = ergebnis * zahl2;
+                ergebnis = ergebnis * zahlDou;
             }
             else if (Operator == "/")
             {
-                ergebnis = ergebnis / zahl2;
+                ergebnis = ergebnis / zahlDou;
             }
             else if (Operator == "+")
             {
-                ergebnis = ergebnis + zahl2;
+                ergebnis = ergebnis + zahlDou;
             }
             else if (Operator == "-")
             {
-                ergebnis = ergebnis + zahl2;
+                ergebnis = ergebnis + zahlDou;
             }
             return ergebnis;
         } //vorzeichen zuordnen       
