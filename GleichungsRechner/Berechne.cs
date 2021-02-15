@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GleichungsRechner
 {
-    class Berechne
+    public class Berechne
     {
         public static List<string> _z = new List<string>();
         public static List<string> _o = new List<string>();
