@@ -9,13 +9,7 @@ namespace GleichungsRechner
         static void Main(string[] args)
         {
             string a = Console.ReadLine(); //input
-            Berechne.parser(a);
-            Console.WriteLine(Berechne.Term());
+            Console.WriteLine(Berechne.Term(a));
         }
-
-        
-
-        
-       
     }
 }
