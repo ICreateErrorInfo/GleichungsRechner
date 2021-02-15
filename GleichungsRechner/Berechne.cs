@@ -76,7 +76,6 @@ namespace GleichungsRechner
         public static void PunktVorStrich()
         {
             bool firstTime = true;
-            double TermErgebnis = 0;
 
             for(; _o.Count > 0;)
             {
@@ -85,11 +84,11 @@ namespace GleichungsRechner
                     int stelle = _o.IndexOf("^");
                     if (firstTime)
                     {
-                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
                         firstTime = false;
                         _z.RemoveAt(stelle + 1);
                     }
-                    TermErgebnis = Berechner("^", TermErgebnis.ToString(), _z[stelle]);
+                    _ergebnis = Berechner("^", _ergebnis.ToString(), _z[stelle]);
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
                     continue;
@@ -100,11 +99,11 @@ namespace GleichungsRechner
                     int stelle = _o.IndexOf("*");
                     if (firstTime)
                     {
-                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
                         firstTime = false;
                         _z.RemoveAt(stelle + 1);
                     }
-                    TermErgebnis = Berechner("*", _z[stelle], TermErgebnis.ToString());
+                    _ergebnis = Berechner("*", _z[stelle], _ergebnis.ToString());
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
                     continue;
@@ -115,11 +114,11 @@ namespace GleichungsRechner
                     int stelle = _o.IndexOf("/");
                     if (firstTime)
                     {
-                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
                         firstTime = false;
                         _z.RemoveAt(stelle + 1);
                     }
-                    TermErgebnis = Berechner("/", _z[stelle], TermErgebnis.ToString());
+                    _ergebnis = Berechner("/", _z[stelle], _ergebnis.ToString());
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
                     continue;
@@ -130,11 +129,11 @@ namespace GleichungsRechner
                     int stelle = _o.IndexOf("+");
                     if (firstTime)
                     {
-                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
                         firstTime = false;
                         _z.RemoveAt(stelle + 1);
                     }
-                    TermErgebnis = Berechner("+", _z[stelle], TermErgebnis.ToString());
+                    _ergebnis = Berechner("+", _z[stelle], _ergebnis.ToString());
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
                     continue;
@@ -145,11 +144,11 @@ namespace GleichungsRechner
                     int stelle = _o.IndexOf("-");
                     if (firstTime)
                     {
-                        TermErgebnis = Convert.ToDouble(_z[stelle + 1]);
+                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
                         firstTime = false;
                         _z.RemoveAt(stelle + 1);
                     }
-                    TermErgebnis = Berechner("-", _z[stelle], TermErgebnis.ToString());
+                    _ergebnis = Berechner("-", _z[stelle], _ergebnis.ToString());
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
                     continue;
