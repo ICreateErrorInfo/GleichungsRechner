@@ -73,25 +73,26 @@ namespace GleichungsRechner
                 }
             }
         }
-        private static void PunktVorStrich()
+        private static double PunktVorStrich(List<string> o, List<string> z)
         {
-            for(; _o.Count > 0;)
+            double ergebnis = 0;
+            for(; o.Count > 0;)
             {
-                if (_o.Contains("^"))
+                if (o.Contains("^"))
                 {
-                    int stelle = _o.IndexOf("^");
-                    _ergebnis = Berechner("^", _z[stelle], _z[stelle + 1]);
-                    _o.RemoveAt(stelle);
-                    _z.RemoveAt(stelle);
-                    _z[stelle] = _ergebnis.ToString();
+                    int stelle = o.IndexOf("^");
+                    ergebnis = Berechner("^", z[stelle], z[stelle + 1]);
+                    o.RemoveAt(stelle);
+                    z.RemoveAt(stelle);
+                    z[stelle] = ergebnis.ToString();
                     continue;
                 }
 
-                if (_o.Contains("*") || (_o.Contains("/")))
+                if (o.Contains("*") || (o.Contains("/")))
                 {
                     string op = "/";
-                    int stelleDiff = _o.IndexOf("/");
-                    int stelleMul = _o.IndexOf("*");
+                    int stelleDiff = o.IndexOf("/");
+                    int stelleMul = o.IndexOf("*");
                     var stelle = stelleDiff;
                     
                     if(stelleMul > -1 && (stelleMul < stelleDiff) || stelleDiff == -1)
@@ -99,33 +100,68 @@ namespace GleichungsRechner
                         op = "*";
                         stelle = stelleMul;
                     }
-                    _ergebnis = Berechner(op, _z[stelle], _z[stelle + 1]);
-                    _o.RemoveAt(stelle);
-                    _z.RemoveAt(stelle);
-                    _z[stelle] = _ergebnis.ToString();
+                    ergebnis = Berechner(op, z[stelle], z[stelle + 1]);
+                    o.RemoveAt(stelle);
+                    z.RemoveAt(stelle);
+                    z[stelle] = ergebnis.ToString();
                     continue;
                 }
 
-                if (_o.Contains("+"))
+                if (o.Contains("+"))
                 {
-                    int stelle = _o.IndexOf("+");
-                    _ergebnis = Berechner("+", _z[stelle], _z[stelle + 1]);
-                    _o.RemoveAt(stelle);
-                    _z.RemoveAt(stelle);
-                    _z[stelle] = _ergebnis.ToString();
+                    int stelle = o.IndexOf("+");
+                    ergebnis = Berechner("+", z[stelle], z[stelle + 1]);
+                    o.RemoveAt(stelle);
+                    z.RemoveAt(stelle);
+                    z[stelle] = ergebnis.ToString();
                     continue;
                 }
 
-                if (_o.Contains("-"))
+                if (o.Contains("-"))
                 {
-                    int stelle = _o.IndexOf("-");
-                    _ergebnis = Berechner("-", _z[stelle], _z[stelle + 1]);
-                    _o.RemoveAt(stelle);
-                    _z.RemoveAt(stelle);
-                    _z[stelle] = _ergebnis.ToString();
+                    int stelle = o.IndexOf("-");
+                    ergebnis = Berechner("-", z[stelle], z[stelle + 1]);
+                    o.RemoveAt(stelle);
+                    z.RemoveAt(stelle);
+                    z[stelle] = ergebnis.ToString();
                     continue;
+                } 
+            }
+            return ergebnis;
+        }
+        private static void Klamer()
+        {
+            if (_o.Contains("("))
+            {
+                var klammerAnfang = _o.IndexOf("(");
+                var klammerEnde = _o.IndexOf(")");
+                List<string> KlammerO = new List<string>();
+                List<string> KlammerZ = new List<string>();
+
+                for (int x = klammerAnfang; x < klammerEnde; x++)
+                {
+                    KlammerZ.Add(_z[x]);
+                }
+                for (int x = klammerAnfang; x + 1 < klammerEnde; x++)
+                {
+                    KlammerO.Add(_o[x + 1]);
+                }
+
+                _z[klammerAnfang] = PunktVorStrich(KlammerO, KlammerZ).ToString();
+
+                for (int x = klammerAnfang + 1; x < klammerEnde; x++)
+                {
+                    _z.RemoveAt(x);
+                }
+                for (int x = klammerAnfang; x <= klammerEnde; x++)
+                {
+                    _o.RemoveAt(klammerAnfang);
                 }
             }
+            else
+            {
+                return;
+            }           
         }
         private static void Clear() 
         {
@@ -139,8 +175,9 @@ namespace GleichungsRechner
             Clear();
             Parser(input);
             VorzeichenBerechner();
+            Klamer();
             PlusZuMinusConverter();
-            PunktVorStrich();
+            _ergebnis = PunktVorStrich(_o, _z);
  
             return _ergebnis;
         }
