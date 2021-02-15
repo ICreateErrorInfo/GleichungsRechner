@@ -41,49 +41,40 @@ namespace GleichungsRechner
                 }
             }
         }
-        public static double Term(string input)
+        public static double Term()
         {
-            string[] inputZ;
-            inputZ = input.Split(Operatoren, StringSplitOptions.RemoveEmptyEntries);  //initialize
-
-            string[] inputOArr;
-            inputOArr = input.Split(Zahlen, StringSplitOptions.RemoveEmptyEntries);   //initialize
-            var inputO = new List<string>(inputOArr);
-
             double ergebnis = 0;
 
-            if (inputOArr.Length == inputZ.Length)
+            if (o.Count == z.Count)
             {
-                double erstezahl = Convert.ToInt32(inputZ[0]);
-                if (inputO[0] == "-")
+                double erstezahl = Convert.ToInt32(z[0]);
+                if (o[0] == "-")
                 {
                     erstezahl = erstezahl - (erstezahl * 2);
-                    inputZ[0] = erstezahl.ToString();
-                    inputO.RemoveAt(0);
-                    inputOArr = inputO.ToArray();
+                    z[0] = erstezahl.ToString();
+                    o.RemoveAt(0);
                 }
                 else
                 {
-                    inputO.RemoveAt(0);
-                    inputOArr = inputO.ToArray();
+                    o.RemoveAt(0);
                 }
             } //vorzeichen erkenner 
 
-            for (int x = 0; inputOArr.Length - 1 > x; x++)
+            for (int x = 0; o.Count - 1 > x; x++)
             {
-                double z = Convert.ToDouble(inputZ[x + 1]);
-                if (inputOArr[x] == "-")
+                double zDou = Convert.ToDouble(z[x+1]);
+                if (o[x] == "-")
                 {
-                    z = z - (z * 2);
-                    inputZ[x + 1] = z.ToString();
+                    zDou = zDou - (zDou * 2);
+                    z[x + 1] = zDou.ToString();
                 }
-                else if (inputOArr[x] == "+")
+                else if (o[x] == "+")
                 {
-                    z = z;
+                    zDou = zDou;
                 }
             } //Vorzeichen erstellen
 
-            ergebnis = PunktVorStrich(inputOArr, inputZ);
+            ergebnis = PunktVorStrich(o, z);
 
             return ergebnis;
         }
@@ -114,11 +105,11 @@ namespace GleichungsRechner
             }
             return false;
         } // check ob input is zahl
-        public static double PunktVorStrich(string[] Operator, string[] inputZ)
+        public static double PunktVorStrich(List<string> Operator, List<string> inputZ)
         {
             double ergebnis = 0;
 
-            for (int x = 0; Operator.Length > x; x++)
+            for (int x = 0; Operator.Count > x; x++)
             {
                 if (Operator[x].Contains('^'))
                 {
@@ -131,7 +122,7 @@ namespace GleichungsRechner
                 }
 
             }
-            for (int x = 0; Operator.Length > x; x++)
+            for (int x = 0; Operator.Count > x; x++)
             {
                 if (Operator[x].Contains('*'))
                 {
@@ -144,7 +135,7 @@ namespace GleichungsRechner
                 }
 
             }
-            for (int x = 0; Operator.Length > x; x++)
+            for (int x = 0; Operator.Count > x; x++)
             {
                 if (Operator[x].Contains('/'))
                 {
@@ -157,7 +148,7 @@ namespace GleichungsRechner
                 }
 
             }
-            for (int x = 0; Operator.Length > x; x++)
+            for (int x = 0; Operator.Count > x; x++)
             {
                 if (Operator[x].Contains('+'))
                 {
@@ -170,7 +161,7 @@ namespace GleichungsRechner
                 }
 
             }
-            for (int x = 0; Operator.Length > x; x++)
+            for (int x = 0; Operator.Count > x; x++)
             {
                 if (Operator[x].Contains('-'))
                 {

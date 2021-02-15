@@ -10,7 +10,7 @@ namespace GleichungsRechner
         {
             string a = Console.ReadLine(); //input
             Berechne.parser(a);
-            Console.WriteLine(Berechne.Term(a));
+            Console.WriteLine(Berechne.Term());
         }
 
         
