@@ -63,7 +63,7 @@ namespace GleichungsRechner
         }
         public static void PlusZuMinusConverter()
         {
-            for (int x = 0; _o.Count - 1 > x; x++)
+            for (int x = 0; _o.Count > x; x++)
             {
                 double zDou = Convert.ToDouble(_z[x + 1]);
                 if (_o[x] == "-")
@@ -75,89 +75,68 @@ namespace GleichungsRechner
         }
         public static void PunktVorStrich()
         {
-            bool firstTime = true;
-
             for(; _o.Count > 0;)
             {
                 if (_o.Contains("^"))
                 {
                     int stelle = _o.IndexOf("^");
-                    if (firstTime)
-                    {
-                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
-                        firstTime = false;
-                        _z.RemoveAt(stelle + 1);
-                    }
-                    _ergebnis = Berechner("^", _ergebnis.ToString(), _z[stelle]);
+                    _ergebnis = Berechner("^", _z[stelle], _z[stelle + 1]);
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
+                    _z[stelle] = _ergebnis.ToString();
                     continue;
                 }
 
-                if (_o.Contains("*"))
+                if (_o.Contains("*") || (_o.Contains("/")))
                 {
-                    int stelle = _o.IndexOf("*");
-                    if (firstTime)
+                    string op = "/";
+                    int stelleDiff = _o.IndexOf("/");
+                    int stelleMul = _o.IndexOf("*");
+                    var stelle = stelleDiff;
+                    
+                    if((stelleMul < stelleDiff) || stelleDiff == -1)
                     {
-                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
-                        firstTime = false;
-                        _z.RemoveAt(stelle + 1);
+                        op = "*";
+                        stelle = stelleMul;
                     }
-                    _ergebnis = Berechner("*", _z[stelle], _ergebnis.ToString());
+                    _ergebnis = Berechner(op, _z[stelle], _z[stelle + 1]);
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
-                    continue;
-                }
-
-                if (_o.Contains("/"))
-                {
-                    int stelle = _o.IndexOf("/");
-                    if (firstTime)
-                    {
-                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
-                        firstTime = false;
-                        _z.RemoveAt(stelle + 1);
-                    }
-                    _ergebnis = Berechner("/", _z[stelle], _ergebnis.ToString());
-                    _o.RemoveAt(stelle);
-                    _z.RemoveAt(stelle);
+                    _z[stelle] = _ergebnis.ToString();
                     continue;
                 }
 
                 if (_o.Contains("+"))
                 {
                     int stelle = _o.IndexOf("+");
-                    if (firstTime)
-                    {
-                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
-                        firstTime = false;
-                        _z.RemoveAt(stelle + 1);
-                    }
-                    _ergebnis = Berechner("+", _z[stelle], _ergebnis.ToString());
+                    _ergebnis = Berechner("+", _z[stelle], _z[stelle + 1]);
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
+                    _z[stelle] = _ergebnis.ToString();
                     continue;
                 }
 
                 if (_o.Contains("-"))
                 {
                     int stelle = _o.IndexOf("-");
-                    if (firstTime)
-                    {
-                        _ergebnis = Convert.ToDouble(_z[stelle + 1]);
-                        firstTime = false;
-                        _z.RemoveAt(stelle + 1);
-                    }
-                    _ergebnis = Berechner("-", _z[stelle], _ergebnis.ToString());
+                    _ergebnis = Berechner("-", _z[stelle], _z[stelle + 1]);
                     _o.RemoveAt(stelle);
                     _z.RemoveAt(stelle);
+                    _z[stelle] = _ergebnis.ToString();
                     continue;
                 }
             }
         }                   
+        private static void Clear() 
+        {
+            _z.Clear();
+            _o.Clear();
+            _ergebnis = 0;
+        }
 
         public static double Term(string input)
         {
+            Clear();
             Parser(input);
             VorzeichenBerechner();
             PlusZuMinusConverter();
@@ -195,13 +174,14 @@ namespace GleichungsRechner
         public static double Berechner(string Operator, string zahl, string zahl2)
         {
             var ergebnis = Convert.ToDouble(zahl);
+            var ergebnis2 = ergebnis;
             var zahlDou = Convert.ToDouble(zahl2);
 
             if (Operator == "^")
             {
                 for (int x = 1; zahlDou > x; x++)
                 {
-                    ergebnis = ergebnis * ergebnis;
+                    ergebnis = ergebnis * ergebnis2;
                 }
             }
             else if (Operator == "*")
