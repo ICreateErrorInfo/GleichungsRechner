@@ -44,9 +44,10 @@ namespace GleichungsRechner
                 }
             }
         }
-        private static void VorzeichenBerechner()
+        private static void VorzeichenBerechner(string input)
         {
-            if (_o.Count == _z.Count)
+            var inputCh = input.ToCharArray();
+            if (inputCh.GetValue(0).ToString() == "-" || inputCh.GetValue(0).ToString() == "+")
             {
                 double erstezahl = Convert.ToInt32(_z[0]);
                 if (_o[0] == "-")
@@ -135,8 +136,11 @@ namespace GleichungsRechner
             {
                 var klammerAnfang = _o.IndexOf("(");
                 var klammerEnde = _o.IndexOf(")");
+                _o.RemoveAt(klammerAnfang);
+                _o.RemoveAt(klammerEnde-1);
                 List<string> KlammerO = new List<string>();
                 List<string> KlammerZ = new List<string>();
+                PlusZuMinusConverter();
 
                 for (int x = klammerAnfang; x < klammerEnde; x++)
                 {
@@ -144,16 +148,16 @@ namespace GleichungsRechner
                 }
                 for (int x = klammerAnfang; x + 1 < klammerEnde; x++)
                 {
-                    KlammerO.Add(_o[x + 1]);
+                    KlammerO.Add(_o[x]);
                 }
 
                 _z[klammerAnfang] = PunktVorStrich(KlammerO, KlammerZ).ToString();
 
                 for (int x = klammerAnfang + 1; x < klammerEnde; x++)
                 {
-                    _z.RemoveAt(x);
+                    _z.RemoveAt(klammerAnfang+1);
                 }
-                for (int x = klammerAnfang; x <= klammerEnde; x++)
+                for (int x = klammerAnfang + 1; x < klammerEnde; x++)
                 {
                     _o.RemoveAt(klammerAnfang);
                 }
@@ -174,11 +178,19 @@ namespace GleichungsRechner
         {
             Clear();
             Parser(input);
-            VorzeichenBerechner();
-            Klamer();
-            PlusZuMinusConverter();
-            _ergebnis = PunktVorStrich(_o, _z);
- 
+            VorzeichenBerechner(input);
+            if (_o.Contains("("))
+            {
+                Klamer();
+                _ergebnis = PunktVorStrich(_o, _z);
+            }
+            else
+            {
+                Klamer();
+                PlusZuMinusConverter();
+                _ergebnis = PunktVorStrich(_o, _z);
+            }
+            
             return _ergebnis;
         }
 
