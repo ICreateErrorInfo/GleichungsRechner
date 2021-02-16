@@ -21,26 +21,31 @@ namespace GleichungsRechner
             {
                 if (isOperator(inputCh[i]))
                 {
-                    _o.Add(inputCh[i].ToString());
-                }
-                else if (isZahl(inputCh[i]))
-                {
-                    if(i + 1 < inputCh.Length)
+                    if(inputCh[i].ToString() == "(" && !isOperator(inputCh[i-1]))
                     {
-                        if (isZahl(inputCh[i]) && isZahl(inputCh[i + 1]))
-                        {
-                            _z.Add((Convert.ToDouble(inputCh[i].ToString()) * 10 + Convert.ToDouble(inputCh[i + 1].ToString())).ToString());
-                            i += 1;
-                        }
-                        else
-                        {
-                            _z.Add(inputCh[i].ToString());
-                        }
+                        _o.Add("*");
+                        _o.Add("(");
+                    }
+                    else
+                    {
+                        _o.Add(inputCh[i].ToString());
+                    }
+                }
+                else if (i + 1 < inputCh.Length && isZahl(inputCh[i]))
+                {
+                    if (isZahl(inputCh[i]) && isZahl(inputCh[i + 1]))
+                    {
+                        _z.Add((Convert.ToDouble(inputCh[i].ToString()) * 10 + Convert.ToDouble(inputCh[i + 1].ToString())).ToString());
+                        i += 1;
                     }
                     else
                     {
                         _z.Add(inputCh[i].ToString());
                     }
+                }
+                else
+                {
+                    _z.Add(inputCh[i].ToString());
                 }
             }
         }
